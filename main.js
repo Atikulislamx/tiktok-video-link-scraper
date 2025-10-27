@@ -104,9 +104,6 @@ Actor.main(async () => {
             finalVideoUrls = finalVideoUrls.slice(0, maxVideos);
         }
         
-        // Remove duplicates (just in case)
-        finalVideoUrls = [...new Set(finalVideoUrls)];
-        
         // Prepare text content
         const textContent = finalVideoUrls.join('\n');
         

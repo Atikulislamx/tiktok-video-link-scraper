@@ -32,6 +32,5 @@ test/
 tests/
 *.test.js
 
-# Documentation
-*.md
-!README.md
+# Documentation (excluding README which may be useful)
+docs/
