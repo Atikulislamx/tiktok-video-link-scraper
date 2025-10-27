@@ -1,0 +1,9 @@
+{
+  "actorSpecification": 1,
+  "name": "tiktok-video-link-scraper",
+  "title": "TikTok Video Link Scraper",
+  "description": "Scrapes all video URLs from a TikTok user profile. Simply provide a TikTok username and the actor will extract all video links, remove duplicates, and save them to a text file.",
+  "version": "1.0.0",
+  "dockerfile": "./Dockerfile",
+  "input": "./.actor/input_schema.json"
+}

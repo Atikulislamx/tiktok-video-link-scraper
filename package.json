@@ -1,0 +1,23 @@
+{
+  "name": "tiktok-video-link-scraper",
+  "version": "1.0.0",
+  "description": "Apify actor that scrapes all TikTok video URLs from a given username",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "tiktok",
+    "scraper",
+    "apify",
+    "video",
+    "links"
+  ],
+  "author": "Atikul Islam",
+  "license": "ISC",
+  "dependencies": {
+    "apify": "^3.0.0",
+    "playwright": "^1.40.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "title": "TikTok Video Link Scraper Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "username": {
+      "title": "TikTok Username",
+      "type": "string",
+      "description": "The TikTok username to scrape video links from (without @ symbol)",
+      "editor": "textfield",
+      "example": "tiktokcreator"
+    },
+    "maxVideos": {
+      "title": "Maximum Videos",
+      "type": "integer",
+      "description": "Maximum number of videos to scrape (0 = unlimited)",
+      "default": 0,
+      "minimum": 0,
+      "editor": "number"
+    }
+  },
+  "required": ["username"]
+}
