@@ -1,0 +1,13 @@
+{
+  "title": "TikTok Username Input",
+  "type": "object",
+  "properties": {
+    "username": {
+      "title": "TikTok Username",
+      "type": "string",
+      "description": "Enter TikTok username (without @)",
+      "default": "masfi82"
+    }
+  },
+  "required": ["username"]
+}
