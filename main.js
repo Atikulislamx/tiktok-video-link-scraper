@@ -1,32 +1,62 @@
-import { Actor } from 'apify';
+import Apify from 'apify';
+import fs from 'fs';
+import fetch from 'node-fetch';
 
-await Actor.init();
+const { log, dataset, keyValueStore, getInput } = Apify;
 
-const input = await Actor.getInput();
-const username = input?.username;
+await Apify.main(async () => {
+    const input = await getInput();
+    const username = input.username;
+    if (!username) {
+        throw new Error('Please provide a TikTok username!');
+    }
 
-if (!username) {
-    throw new Error('TikTok username is required in input.');
-}
+    log.info(`Fetching video links for @${username} ...`);
 
-console.log(`Fetching video links for @${username} ...`);
+    const videoLinks = [];
+    let hasMore = true;
+    let cursor = 0;
 
-const profileUrl = `https://www.tiktok.com/@${username}`;
+    while (hasMore) {
+        const url = `https://www.tiktok.com/api/user/detail/?username=${username}&count=30&cursor=${cursor}`;
+        // TikTok API endpoint may vary; we’ll try JSON endpoint for videos
+        const userInfoUrl = `https://www.tiktok.com/@${username}?lang=en`;
 
-// Use fetch to get HTML of the profile page
-const response = await fetch(profileUrl);
-const html = await response.text();
+        const headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'Accept': 'application/json, text/plain, */*'
+        };
 
-// Extract video URLs using regex
-const videoUrls = [...html.matchAll(/https:\/\/www\.tiktok\.com\/@[^"]+\/video\/\d+/g)]
-    .map(match => match[0])
-    .filter((v, i, a) => a.indexOf(v) === i); // remove duplicates
+        const response = await fetch(userInfoUrl, { headers });
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user data: ${response.status}`);
+        }
 
-console.log(`✅ Found ${videoUrls.length} video links.`);
+        const html = await response.text();
 
-// Save video links to a txt file in Apify Key-Value Store
-const fileContent = videoUrls.join('\n');
-await Actor.setValue('video_links.txt', fileContent, { contentType: 'text/plain' });
+        // Extract JSON from TikTok page
+        const match = html.match(/<script id="SIGI_STATE" type="application\/json">(.+?)<\/script>/);
+        if (!match) break;
 
-console.log('📄 video_links.txt saved successfully!');
-await Actor.exit();
+        const json = JSON.parse(match[1]);
+        const videos = Object.values(json.ItemModule || {});
+
+        if (videos.length === 0) break;
+
+        for (const video of videos) {
+            videoLinks.push(`https://www.tiktok.com/@${username}/video/${video.id}`);
+        }
+
+        hasMore = false; // JSON from page loads all recent videos; you can implement cursor logic if needed
+    }
+
+    // Remove duplicates
+    const uniqueLinks = [...new Set(videoLinks)];
+
+    // Save to txt
+    const txt = uniqueLinks.join('\n');
+    await keyValueStore.setValue('video_links.txt', txt);
+
+    log.info(`✅ Found ${uniqueLinks.length} video links.`);
+    log.info('📄 video_links.txt saved successfully!');
+});
