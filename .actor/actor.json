@@ -1,0 +1,13 @@
+{
+  "actorSpecification": 1,
+  "name": "tiktok-video-link-scraper",
+  "title": "TikTok Video Link Scraper",
+  "description": "Scrapes all video URLs from a TikTok user profile and saves them to a text file",
+  "version": "1.0.0",
+  "meta": {
+    "templateId": "node-playwright"
+  },
+  "input": "./.actor/INPUT_SCHEMA.json",
+  "dockerfile": "./Dockerfile",
+  "readme": "./README.md"
+}

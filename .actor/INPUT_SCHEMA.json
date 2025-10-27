@@ -1,0 +1,15 @@
+{
+  "title": "TikTok Video Link Scraper Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "username": {
+      "title": "TikTok Username",
+      "type": "string",
+      "description": "The TikTok username to scrape video links from (without @ symbol)",
+      "editor": "textfield",
+      "example": "tiktok"
+    }
+  },
+  "required": ["username"]
+}
