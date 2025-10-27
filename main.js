@@ -1,9 +1,9 @@
-const Apify = require('apify');
+const { Actor } = require('apify');
 const { chromium } = require('playwright');
 
-Apify.main(async () => {
+Actor.main(async () => {
     // Get input from Apify Key-Value Store
-    const input = await Apify.getInput();
+    const input = await Actor.getInput();
     
     if (!input || !input.username) {
         throw new Error('Username is required in the input!');
@@ -111,11 +111,11 @@ Apify.main(async () => {
         const textContent = finalVideoUrls.join('\n');
         
         // Save to Apify Key-Value Store as a text file
-        await Apify.setValue('video_links.txt', textContent, { contentType: 'text/plain' });
+        await Actor.setValue('video_links.txt', textContent, { contentType: 'text/plain' });
         console.log('Video links saved to Key-Value Store as "video_links.txt"');
         
         // Also save as JSON for programmatic access
-        await Apify.setValue('OUTPUT', {
+        await Actor.setValue('OUTPUT', {
             username,
             totalVideos: finalVideoUrls.length,
             videoUrls: finalVideoUrls,
